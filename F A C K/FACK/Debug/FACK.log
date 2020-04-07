@@ -1,0 +1,3 @@
+﻿  Source.cpp
+d:\работы\fack\fack\source.cpp(34): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  FACK.vcxproj -> D:\Работы\FACK\Debug\FACK.exe
