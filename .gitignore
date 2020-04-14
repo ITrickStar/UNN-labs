@@ -1,4 +1,6 @@
 *.manifest
+*.opendb
+*.ipch
 *.log
 *.out
 *.7z
