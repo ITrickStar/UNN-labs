@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNING
 #include <iostream>
 #include <conio.h>
+#include <string>
 using namespace std;
 
 class Except
@@ -13,8 +14,16 @@ public:
 	static const int wrongSizes = 1;
 	static const int divideByZero = 2;
 	Except(int _err) : err(_err) {};
+	//string text() { return txt[err]; };
 	string text() { return txt[err]; };
+	friend ostream& operator<< (ostream& stream, const Except ex);
 };
+
+ostream& operator<< (ostream &stream, Except ex)
+{
+	return stream << ex.text() << endl;;
+}
+
 
 class Vector
 {
@@ -39,6 +48,30 @@ public:
 	Vector(const Vector& other) : m_x(other.m_x), m_y(other.m_y), m_z(other.m_z)
 	{
 		cout << "Copy constructor V " << this << endl;
+	}
+
+	//Перегрузка оператора сложения V
+	Vector operator+ (const Vector& other)
+	{
+		Vector tmp;
+
+		tmp.m_x = m_x + other.m_x;
+		tmp.m_y = m_y + other.m_y;
+		tmp.m_z = m_z + other.m_z;
+
+		return tmp;
+	}
+
+	//Перегрузка оператора вычитания
+	Vector operator- (const Vector& other)
+	{
+		Vector tmp;
+
+		tmp.m_x = m_x - other.m_x;
+		tmp.m_y = m_y - other.m_y;
+		tmp.m_z = m_z - other.m_z;
+
+		return tmp;
 	}
 
 	// Перегрузка присваивания
@@ -69,7 +102,7 @@ public:
 	friend void printV(Vector other);
 
 };
-
+ //Вывод вектора в консоль
 void printV(Vector other)
 {
 	cout << "(" << other.m_x << "," << other.m_y << "," << other.m_z << ")" << endl;
@@ -128,6 +161,43 @@ public:
 		cout << "COPY M " << this << endl;
 	}
 
+	//Перегрузка оператора сложения
+	Matrix operator+(const Matrix& other)
+	{
+		Matrix tmp(m_row, other.m_column);
+
+		if (m_row == other.m_row && m_column == other.m_column)
+		{
+			for (int i = 0; i < m_row; i++)
+				for (int j = 0; j < m_column; j++)
+				{
+					tmp.arr[i][j] = arr[i][j] + other.arr[i][j];
+				}
+		}
+		else throw Except(Except::wrongSizes);
+
+		return tmp;
+	}
+
+
+	//Перегрузка оператора вычитания
+	Matrix operator-(const Matrix& other)
+	{
+		Matrix tmp(m_row, other.m_column);
+
+		if (m_row == other.m_row && m_column == other.m_column)
+		{
+			for (int i = 0; i < m_row; i++)
+				for (int j = 0; j < m_column; j++)
+				{
+					tmp.arr[i][j] = arr[i][j] - other.arr[i][j];
+				}
+		}
+		else throw Except(Except::wrongSizes);
+
+		return tmp;
+	}
+
 	// Перегрузка присваивания
 	Matrix& operator= (const Matrix& other)
 	{
@@ -158,6 +228,7 @@ public:
 		return *this;
 	} 
 
+	// Перегрузка умножения
 	Matrix operator*(const Matrix& other)
 	{
 		if (m_row == other.m_column)
@@ -195,6 +266,7 @@ public:
 
 };
 
+//Вывод матрицы в консоль
 void printM(Matrix other)
 {
 	for (int i = 0; i < other.m_row; i++)
@@ -210,35 +282,57 @@ void main()
 {
 	// обработка ошибок ввода
 	Vector a(9, 1, 1);
-	Vector b(1, 0, 0);
-	try 
+	Vector b(1, 0, 1);
+
+	/* try 
 	{
 		a[5] = 1;
 	}
 	catch (...)
 	{
 		cout << "Something goes wrong" << endl;
+	} */
+
+	try
+	{
+		Vector c = a + b;
+		cout << endl;
+		printV(c);
+		cout << endl;
 	}
-	
+	catch (Except& exception)
+	{
+		cout << exception << endl;
+	}
 
-	printV(a);
+	Matrix c(2, 2);
+	Matrix d(2, 2);
 
-	a = b;
+	try
+	{
+		Matrix e = c - d;
 
-	printV(a);
+		printM(c);
+		cout << "-" << endl;
+		printM(d);
+		cout << "=" << endl;
+		printM(e);
+	}
+	catch (Except& exception)
+	{
+		cout << exception << endl;
+	}
+
 	try 
 	{
-		Matrix c(2, 2);
-		Matrix d(3, 3);
-
 		printM(c);
 
 		Matrix e = c * d;
 		printM(e);
 	}
-	catch (Except& ex)
+	catch (Except& exception)
 	{
-		cout << ex.text() << endl;
+		cout << exception << endl;
 	}
 	catch (...)
 	{
