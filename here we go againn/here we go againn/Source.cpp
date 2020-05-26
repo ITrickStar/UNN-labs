@@ -99,13 +99,14 @@ public:
 	}
 
 	//делаем доступ к приватным переменным
-	friend void printV(Vector other);
+	template <class T>
+	friend void printV(Vector<T> other);
 
 };
 
 //Вывод вектора в консоль
-//template <class T>
-void printV(Vector<int> other)
+template<class U>
+void printV(Vector<U> other)
 {
 	cout << "(" << other.m_x << "," << other.m_y << "," << other.m_z << ")" << endl;
 }

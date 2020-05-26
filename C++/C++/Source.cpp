@@ -97,10 +97,13 @@ public:
 	{
 		Vector tmp;
 
-		tmp.m_x = m_x/con;
-		tmp.m_y = m_y/con;
-		tmp.m_z = m_z/con;
-
+		if (con != 0)
+		{
+			tmp.m_x = m_x / con;
+			tmp.m_y = m_y / con;
+			tmp.m_z = m_z / con;
+		}
+		else throw Except(Except::divideByZero);
 		return tmp;
 	}
 
