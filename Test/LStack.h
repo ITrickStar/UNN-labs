@@ -1,100 +1,37 @@
 #pragma once
-template <typename T>
-struct Node
-{
-public:
-	Node* pNext;
-	T data;
-	Node(T _data = T(), Node* _pNext = nullptr) :data(_data), pNext(_pNext) {}
-};
-
-
+#include "List.h"
 
 template<class T>
 class LStack
 {
-private:
-	int Size = 0;
-	Node<T>* head;
-
 public:
-	LStack()
+	List<T> S;
+
+	int Size()
 	{
-		head = nullptr;
+		return S.GetSize();
 	}
 
-	LStack(int n, T data)
+	void Push(T data)
 	{
-		Node<T>* head = new Node<T>(data);
-		Node<T>* current = head;
-		Size++;
+		S.push_back(data);
+	}
 
-		while (n != 1)
+	void Pop()
+	{
+		S.pop_front();
+	}
+
+	void Print()
+	{
+		cout << "Your List: " << endl;
+		cout << S.GetSize() << endl;
+
+		for (int j = 0; j < S.GetSize(); j++)
 		{
-			current->pNext = new Node<T>(data);
-			current = current->pNext;
-			Size++;
-			n--;
+			cout << S[j]->data << " ";
 		}
-	}
 
-	~LStack()
-	{
-		while (head != (nullptr))
-		{
-			Node<T>* p = head;
-			head = head->pNext;
-			delete p;
-		}
+		cout << endl;
 	}
-
-	Node<T>* Head() { return head; };
-	void push(T data);
-	void pop();
-	T& operator[](const int Index);
-	int GetSize() { return Size; };
 };
-
-template <typename T>
-void LStack<T>::push(T data)
-{
-	if (head == nullptr)
-	{
-		head = new Node<T>(data);
-	}
-	else
-	{
-		Node<T>* current = this->head;
-		head = new Node<T>(data);
-		head->pNext = current;
-	}
-	Size++;
-}
-
-template <typename T>
-void LStack<T>::pop()
-{
-	if (head != nullptr)
-	{
-		Node<T>* current = head;
-		head = head->pNext;
-		delete current;
-		Size--;
-	}
-}
-
-template <typename T>
-T& LStack<T>::operator[](const int Index)
-{
-	Node<T> *current = this->head;
-	int counter = 0;
-	while (current != nullptr)
-	{
-		if (counter == Index)
-		{
-			return current->data;
-		}
-		else current = current->pNext;
-		counter++;
-	}
-}
